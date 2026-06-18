@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Zap } from "lucide-react";
 import { Button } from "@/src/components/ui/button";
+import { ThemeToggle } from "@/src/components/theme-toggle";
 
 const links = [
   { href: "#features", label: "Features" },
@@ -32,6 +33,7 @@ export function MarketingNav() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           <Button asChild variant="ghost" size="sm" className="hidden sm:flex">
             <a
               href="https://github.com/Core-Foundry/Notify-Chain"

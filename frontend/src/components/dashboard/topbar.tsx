@@ -2,6 +2,7 @@
 
 import { Search, Bell } from "lucide-react";
 import { Button } from "@/src/components/ui/button";
+import { ThemeToggle } from "@/src/components/theme-toggle";
 
 interface TopbarProps {
   title: string;
@@ -30,6 +31,7 @@ export function Topbar({ title, description }: TopbarProps) {
             /
           </kbd>
         </div>
+        <ThemeToggle />
         <Button variant="outline" size="icon" aria-label="Notifications">
           <Bell className="size-4" />
         </Button>
