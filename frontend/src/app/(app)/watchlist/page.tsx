@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Plus, Copy, Check, Trash2 } from "lucide-react";
 import { Topbar } from "@/src/components/dashboard/topbar";
+import Link from "next/link";
 import { StatusBadge } from "@/src/components/dashboard/status-badge";
 import { Button } from "@/src/components/ui/button";
 import { useData } from "@/src/store";
@@ -71,7 +72,9 @@ export default function WatchlistPage() {
                   />
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
-                      <p className="truncate font-medium">{c.name}</p>
+                      <Link href={`/contracts/${c.id}`} className="truncate font-medium hover:underline">
+                        {c.name}
+                      </Link>
                       <StatusBadge
                         tone={c.active ? "success" : "muted"}
                         label={c.active ? "active" : "paused"}
