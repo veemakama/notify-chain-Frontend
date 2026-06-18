@@ -25,7 +25,16 @@ export const useAppStore = create<AppStore>()(
       }),
       {
         name: 'notify-chain-store',
-        version: 1,
+        version: 2,
+        migrate: (persistedState) => {
+          const state = persistedState as Partial<AppStore> | undefined;
+          return {
+            ...state,
+            dashboardFilterPresets: Array.isArray(state?.dashboardFilterPresets)
+              ? state.dashboardFilterPresets
+              : [],
+          } as Partial<AppStore>;
+        },
         storage: {
           getItem: (name) => {
             const item = localStorage.getItem(name);
@@ -43,6 +52,8 @@ export const useAppStore = create<AppStore>()(
           viewMode: state.viewMode,
           theme: state.theme,
           dashboardChainFilter: state.dashboardChainFilter,
+          dashboardSearchQuery: state.dashboardSearchQuery,
+          dashboardFilterPresets: state.dashboardFilterPresets,
           language: state.language,
           currencyDisplay: state.currencyDisplay,
           notificationsEnabled: state.notificationsEnabled,
@@ -81,6 +92,7 @@ export function useUIState<T>(selector?: (state: AppStore) => T): T | AppStore {
     theme: state.theme,
     dashboardChainFilter: state.dashboardChainFilter,
     dashboardSearchQuery: state.dashboardSearchQuery,
+    dashboardFilterPresets: state.dashboardFilterPresets,
     toggleSidebar: state.toggleSidebar,
     openModal: state.openModal,
     closeModal: state.closeModal,
@@ -88,6 +100,10 @@ export function useUIState<T>(selector?: (state: AppStore) => T): T | AppStore {
     setTheme: state.setTheme,
     setDashboardChainFilter: state.setDashboardChainFilter,
     setDashboardSearchQuery: state.setDashboardSearchQuery,
+    saveDashboardFilterPreset: state.saveDashboardFilterPreset,
+    updateDashboardFilterPreset: state.updateDashboardFilterPreset,
+    deleteDashboardFilterPreset: state.deleteDashboardFilterPreset,
+    applyDashboardFilterPreset: state.applyDashboardFilterPreset,
     resetUIState: state.resetUIState,
   }))) as (state: AppStore) => T | AppStore;
   return useAppStore(sel);
@@ -156,4 +172,13 @@ export function useData<T>(selector?: (state: AppStore) => T): T | AppStore {
   return useAppStore(sel);
 }
 
-export type { AppStore, UIState, UIActions, PreferencesState, PreferencesActions, DataState, DataActions } from './types';
+export type {
+  AppStore,
+  UIState,
+  UIActions,
+  PreferencesState,
+  PreferencesActions,
+  DataState,
+  DataActions,
+  DashboardFilterPreset,
+} from './types';

@@ -15,7 +15,7 @@ import { DEFAULT_PREFERENCES } from '../defaults';
  */
 export const persistenceConfig: PersistOptions<AppStore, Partial<AppStore>> = {
   name: 'notify-chain-store',
-  version: 1,
+  version: 2,
   merge: (persistedState, currentState) => {
     try {
       const merged = { ...currentState, ...(persistedState as Partial<AppStore>) };
@@ -27,6 +27,7 @@ export const persistenceConfig: PersistOptions<AppStore, Partial<AppStore>> = {
         theme: merged.theme || DEFAULT_UI_STATE.theme,
         dashboardChainFilter: merged.dashboardChainFilter !== undefined ? merged.dashboardChainFilter : DEFAULT_UI_STATE.dashboardChainFilter,
         dashboardSearchQuery: merged.dashboardSearchQuery !== undefined ? merged.dashboardSearchQuery : DEFAULT_UI_STATE.dashboardSearchQuery,
+        dashboardFilterPresets: Array.isArray(merged.dashboardFilterPresets) ? merged.dashboardFilterPresets : DEFAULT_UI_STATE.dashboardFilterPresets,
         language: merged.language || DEFAULT_PREFERENCES.language,
         currencyDisplay: merged.currencyDisplay || DEFAULT_PREFERENCES.currencyDisplay,
         notificationsEnabled: merged.notificationsEnabled !== undefined ? merged.notificationsEnabled : DEFAULT_PREFERENCES.notificationsEnabled,
@@ -42,6 +43,8 @@ export const persistenceConfig: PersistOptions<AppStore, Partial<AppStore>> = {
     viewMode: state.viewMode,
     theme: state.theme,
     dashboardChainFilter: state.dashboardChainFilter,
+    dashboardSearchQuery: state.dashboardSearchQuery,
+    dashboardFilterPresets: state.dashboardFilterPresets,
     language: state.language,
     currencyDisplay: state.currencyDisplay,
     notificationsEnabled: state.notificationsEnabled,
