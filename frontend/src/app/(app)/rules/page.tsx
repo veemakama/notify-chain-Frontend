@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Zap, X, ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { Plus, Zap, X, ChevronRight, Clock3 } from "lucide-react";
 import { Topbar } from "@/src/components/dashboard/topbar";
 import { StatusBadge } from "@/src/components/dashboard/status-badge";
 import {
@@ -47,87 +48,93 @@ export default function RulesPage() {
         ) : null}
 
         <div className="grid gap-4">
-          {rules.map((rule) => (
-            <div
-              key={rule.id}
-              className="rounded-xl border border-border bg-card p-5"
-            >
-              <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                <div className="min-w-0">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="font-medium">{rule.name}</h3>
-                    <StatusBadge
-                      tone={rule.status === "active" ? "success" : "muted"}
-                      label={rule.status}
-                    />
-                  </div>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    {rule.description}
-                  </p>
-
-                  <div className="mt-4 flex flex-wrap items-center gap-2 font-mono text-xs">
-                    <span className="rounded-md border border-border bg-background px-2 py-1 text-muted-foreground">
-                      {rule.chain}
-                    </span>
-                    <ChevronRight className="size-3 text-muted-foreground" />
-                    <span className="rounded-md border border-border bg-background px-2 py-1 text-foreground">
-                      {rule.eventSignature}
-                    </span>
-                    <ChevronRight className="size-3 text-muted-foreground" />
-                    <span className="rounded-md border border-primary/20 bg-primary/10 px-2 py-1 text-primary">
-                      {rule.condition}
-                    </span>
-                  </div>
-
-                  <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
-                    <span className="flex items-center gap-2">
-                      Channels:
-                      <span className="flex items-center gap-1.5">
-                        {rule.channels.map((c) => (
-                          <span
-                            key={c}
-                            className="flex items-center gap-1 rounded-md border border-border bg-secondary px-1.5 py-0.5 text-foreground"
-                          >
-                            <ChannelIcon type={c} className="size-3" />
-                            {channelLabels[c]}
-                          </span>
-                        ))}
-                      </span>
-                    </span>
-                    <span>
-                      <span className="text-foreground">
-                        {rule.triggered24h}
-                      </span>{" "}
-                      triggered (24h)
-                    </span>
-                    <span>Last: {timeAgo(rule.lastTriggered)}</span>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <label className="flex cursor-pointer items-center gap-2 text-xs text-muted-foreground">
-                    <span>{rule.status === "active" ? "On" : "Off"}</span>
-                    <button
-                      role="switch"
-                      aria-checked={rule.status === "active"}
-                      onClick={() => toggleRule(rule.id)}
-                      className={
-                        "relative h-5 w-9 rounded-full transition-colors " +
-                        (rule.status === "active"
-                          ? "bg-primary"
-                          : "bg-secondary")
-                      }
-                    >
-                      <span
-                        className={
-                          "absolute top-0.5 size-4 rounded-full bg-background transition-transform " +
-                          (rule.status === "active"
-                            ? "translate-x-4"
-                            : "translate-x-0.5")
-                        }
+            {rules.map((rule) => (
+              <div
+                key={rule.id}
+                className="rounded-xl border border-border bg-card p-5"
+              >
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h3 className="font-medium">{rule.name}</h3>
+                      <StatusBadge
+                        tone={rule.status === "active" ? "success" : "muted"}
+                        label={rule.status}
                       />
-                    </button>
-                  </label>
+                    </div>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      {rule.description}
+                    </p>
+
+                    <div className="mt-4 flex flex-wrap items-center gap-2 font-mono text-xs">
+                      <span className="rounded-md border border-border bg-background px-2 py-1 text-muted-foreground">
+                        {rule.chain}
+                      </span>
+                      <ChevronRight className="size-3 text-muted-foreground" />
+                      <span className="rounded-md border border-border bg-background px-2 py-1 text-foreground">
+                        {rule.eventSignature}
+                      </span>
+                      <ChevronRight className="size-3 text-muted-foreground" />
+                      <span className="rounded-md border border-primary/20 bg-primary/10 px-2 py-1 text-primary">
+                        {rule.condition}
+                      </span>
+                    </div>
+
+                    <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
+                      <span className="flex items-center gap-2">
+                        Channels:
+                        <span className="flex items-center gap-1.5">
+                          {rule.channels.map((c) => (
+                            <span
+                              key={c}
+                              className="flex items-center gap-1 rounded-md border border-border bg-secondary px-1.5 py-0.5 text-foreground"
+                            >
+                              <ChannelIcon type={c} className="size-3" />
+                              {channelLabels[c]}
+                            </span>
+                          ))}
+                        </span>
+                      </span>
+                      <span>
+                        <span className="text-foreground">
+                          {rule.triggered24h}
+                        </span>{" "}
+                        triggered (24h)
+                      </span>
+                      <span>Last: {timeAgo(rule.lastTriggered)}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-3">
+                    <Button asChild variant="outline" size="sm">
+                      <Link href={`/rules/${rule.id}/history`}>
+                        <Clock3 className="size-4" />
+                        History
+                      </Link>
+                    </Button>
+                    <label className="flex cursor-pointer items-center gap-2 text-xs text-muted-foreground">
+                      <span>{rule.status === "active" ? "On" : "Off"}</span>
+                      <button
+                        role="switch"
+                        aria-checked={rule.status === "active"}
+                        onClick={() => toggleRule(rule.id)}
+                        className={
+                          "relative h-5 w-9 rounded-full transition-colors " +
+                          (rule.status === "active"
+                            ? "bg-primary"
+                            : "bg-secondary")
+                        }
+                      >
+                        <span
+                          className={
+                            "absolute top-0.5 size-4 rounded-full bg-background transition-transform " +
+                            (rule.status === "active"
+                              ? "translate-x-4"
+                              : "translate-x-0.5")
+                          }
+                        />
+                      </button>
+                    </label>
                 </div>
               </div>
             </div>
