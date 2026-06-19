@@ -92,10 +92,21 @@ export interface DataActions {
   resetData: () => void;
 }
 
-// Combined Store Types
-export interface AppStoreState extends UIState, PreferencesState, DataState {}
+// Wallet State Types
+export interface WalletState {
+  walletAddress: string | null;
+  isWalletConnected: boolean;
+}
 
-export interface AppStore extends AppStoreState, UIActions, PreferencesActions, DataActions {}
+export interface WalletActions {
+  setWalletAddress: (address: string | null) => void;
+  disconnectWallet: () => void;
+}
+
+// Combined Store Types
+export interface AppStoreState extends UIState, PreferencesState, DataState, WalletState {}
+
+export interface AppStore extends AppStoreState, UIActions, PreferencesActions, DataActions, WalletActions {}
 
 // Persistence Config
 export interface PersistenceConfig {
