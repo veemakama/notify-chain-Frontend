@@ -5,6 +5,7 @@ import type { AppStore } from './types';
 import { uiSlice } from './slices/uiSlice';
 import { preferencesSlice } from './slices/preferencesSlice';
 import { dataSlice } from './slices/dataSlice';
+import { walletSlice } from './slices/walletSlice';
 
 /**
  * Create the app store combining all slices
@@ -21,6 +22,7 @@ export const useAppStore = create<AppStore>()(
           ...uiSlice(...args),
           ...preferencesSlice(...args),
           ...dataSlice(...args),
+          ...walletSlice(...args),
         };
       }),
       {
@@ -180,5 +182,22 @@ export type {
   PreferencesActions,
   DataState,
   DataActions,
+  WalletState,
+  WalletActions,
   DashboardFilterPreset,
 } from './types';
+
+/**
+ * Custom hook for wallet state
+ */
+export function useWallet(): AppStore;
+export function useWallet<T>(selector: (state: AppStore) => T): T;
+export function useWallet<T>(selector?: (state: AppStore) => T): T | AppStore {
+  const sel = (selector ?? ((state: AppStore) => ({
+    walletAddress: state.walletAddress,
+    isWalletConnected: state.isWalletConnected,
+    setWalletAddress: state.setWalletAddress,
+    disconnectWallet: state.disconnectWallet,
+  }))) as (state: AppStore) => T | AppStore;
+  return useAppStore(sel);
+}

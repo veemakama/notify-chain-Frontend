@@ -146,8 +146,45 @@ export default function RulesPage() {
 }
 
 function NewRuleForm({ onClose }: { onClose: () => void }) {
+  const addRule = useData((state) => state.addRule);
   const channelOptions = Object.keys(channelIcons) as ChannelType[];
+  const [name, setName] = useState("");
+  const [contract, setContract] = useState("");
+  const [eventSignature, setEventSignature] = useState("");
+  const [condition, setCondition] = useState("");
   const [selected, setSelected] = useState<ChannelType[]>(["webhook"]);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validate = () => {
+    const newErrors: Record<string, string> = {};
+    if (!name.trim()) newErrors.name = "Rule name is required";
+    if (!contract.trim()) newErrors.contract = "Contract address is required";
+    if (!eventSignature.trim()) newErrors.eventSignature = "Event signature is required";
+    if (!condition.trim()) newErrors.condition = "Condition is required";
+    if (selected.length === 0) newErrors.channels = "Select at least one channel";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = () => {
+    if (!validate()) return;
+
+    addRule({
+      id: crypto.randomUUID(),
+      name: name.trim(),
+      description: `Monitor ${eventSignature} on ${contract}`,
+      contract: contract.trim(),
+      eventSignature: eventSignature.trim(),
+      chain: "ethereum",
+      condition: condition.trim(),
+      channels: selected,
+      status: "active",
+      triggered24h: 0,
+      lastTriggered: null,
+    });
+
+    onClose();
+  };
 
   return (
     <div className="rounded-xl border border-primary/30 bg-card p-5">
@@ -168,27 +205,35 @@ function NewRuleForm({ onClose }: { onClose: () => void }) {
       </div>
 
       <div className="mt-5 grid gap-4 sm:grid-cols-2">
-        <Field label="Rule name">
+        <Field label="Rule name" error={errors.name}>
           <input
             placeholder="e.g. Large USDC transfers"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary/50"
           />
         </Field>
-        <Field label="Contract / address">
+        <Field label="Contract / address" error={errors.contract}>
           <input
             placeholder="0xA0b8…eB48"
+            value={contract}
+            onChange={(e) => setContract(e.target.value)}
             className="w-full rounded-md border border-border bg-background px-3 py-2 font-mono text-sm outline-none focus:border-primary/50"
           />
         </Field>
-        <Field label="Event signature">
+        <Field label="Event signature" error={errors.eventSignature}>
           <input
             placeholder="Transfer(address,address,uint256)"
+            value={eventSignature}
+            onChange={(e) => setEventSignature(e.target.value)}
             className="w-full rounded-md border border-border bg-background px-3 py-2 font-mono text-sm outline-none focus:border-primary/50"
           />
         </Field>
-        <Field label="Condition">
+        <Field label="Condition" error={errors.condition}>
           <input
             placeholder="value > 1,000,000"
+            value={condition}
+            onChange={(e) => setCondition(e.target.value)}
             className="w-full rounded-md border border-border bg-background px-3 py-2 font-mono text-sm outline-none focus:border-primary/50"
           />
         </Field>
@@ -198,12 +243,16 @@ function NewRuleForm({ onClose }: { onClose: () => void }) {
         <p className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
           Deliver to
         </p>
+        {errors.channels && (
+          <p className="mb-2 text-xs text-destructive">{errors.channels}</p>
+        )}
         <div className="flex flex-wrap gap-2">
           {channelOptions.map((c) => {
             const active = selected.includes(c);
             return (
               <button
                 key={c}
+                type="button"
                 onClick={() =>
                   setSelected((prev) =>
                     prev.includes(c)
@@ -230,7 +279,7 @@ function NewRuleForm({ onClose }: { onClose: () => void }) {
         <Button variant="ghost" onClick={onClose}>
           Cancel
         </Button>
-        <Button onClick={onClose}>Create rule</Button>
+        <Button onClick={handleSubmit}>Create rule</Button>
       </div>
     </div>
   );
@@ -239,9 +288,11 @@ function NewRuleForm({ onClose }: { onClose: () => void }) {
 function Field({
   label,
   children,
+  error,
 }: {
   label: string;
   children: React.ReactNode;
+  error?: string;
 }) {
   return (
     <label className="block">
@@ -249,6 +300,7 @@ function Field({
         {label}
       </span>
       {children}
+      {error && <p className="mt-1 text-xs text-destructive">{error}</p>}
     </label>
   );
 }

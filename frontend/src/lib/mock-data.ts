@@ -569,6 +569,38 @@ export const channelLabels: Record<ChannelType, string> = {
   discord: "Discord",
 };
 
+// Notification delivery channels — the surfaces a notification can be sent on.
+// Distinct from NotificationChannel (a configured destination); these are the
+// aggregate per-channel delivery metrics surfaced on the dashboard.
+export type DeliveryChannel = "email" | "sms" | "push" | "in-app";
+
+export interface ChannelMetric {
+  channel: DeliveryChannel;
+  successful: number;
+  failed: number;
+}
+
+export const deliveryChannelLabels: Record<DeliveryChannel, string> = {
+  email: "Email",
+  sms: "SMS",
+  push: "Push",
+  "in-app": "In-App",
+};
+
+export const DELIVERY_CHANNELS: DeliveryChannel[] = [
+  "email",
+  "sms",
+  "push",
+  "in-app",
+];
+
+export const channelMetrics: ChannelMetric[] = [
+  { channel: "email", successful: 1_284_900, failed: 4_120 },
+  { channel: "sms", successful: 642_300, failed: 8_840 },
+  { channel: "push", successful: 2_481_500, failed: 15_240 },
+  { channel: "in-app", successful: 318_420, failed: 910 },
+];
+
 export function timeAgo(iso: string | null): string {
   if (!iso) return "never";
   const diff = Date.now() - new Date(iso).getTime();

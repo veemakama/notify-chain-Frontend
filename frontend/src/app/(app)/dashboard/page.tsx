@@ -18,9 +18,8 @@ import { Topbar } from "@/src/components/dashboard/topbar";
 import { StatCard } from "@/src/components/dashboard/stat-card";
 import { StatusBadge } from "@/src/components/dashboard/status-badge";
 import { EventVolumeChart } from "@/src/components/dashboard/event-volume-chart";
-import { Button } from "@/src/components/ui/button";
-import { Input } from "@/src/components/ui/input";
-import { useUIState, type DashboardFilterPreset } from "@/src/store";
+import { ChannelMetrics } from "@/src/components/dashboard/channel-metrics";
+import { useUIState } from "@/src/store";
 import {
   events,
   dashboardStats,
@@ -172,6 +171,10 @@ export default function DashboardPage() {
           />
         </div>
 
+        {/* Notification metrics by delivery channel */}
+        <ChannelMetrics />
+
+        {/* Chart */}
         <div className="rounded-xl border border-border bg-card">
           <div className="flex items-center justify-between border-b border-border px-5 py-4">
             <div>
