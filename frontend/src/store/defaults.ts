@@ -11,6 +11,7 @@ export const DEFAULT_UI_STATE: UIState = {
   theme: 'system',
   dashboardChainFilter: 'All',
   dashboardSearchQuery: '',
+  dashboardFilterPresets: [],
 };
 
 export const DEFAULT_PREFERENCES: PreferencesState = {

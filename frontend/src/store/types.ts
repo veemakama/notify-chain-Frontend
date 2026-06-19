@@ -16,6 +16,7 @@ export interface UIState {
   // Dashboard filters
   dashboardChainFilter: string;
   dashboardSearchQuery: string;
+  dashboardFilterPresets: DashboardFilterPreset[];
 }
 
 export interface UIActions {
@@ -26,7 +27,20 @@ export interface UIActions {
   setTheme: (theme: Theme) => void;
   setDashboardChainFilter: (chain: string) => void;
   setDashboardSearchQuery: (query: string) => void;
+  saveDashboardFilterPreset: (name: string) => void;
+  updateDashboardFilterPreset: (id: string, name: string) => void;
+  deleteDashboardFilterPreset: (id: string) => void;
+  applyDashboardFilterPreset: (id: string) => void;
   resetUIState: () => void;
+}
+
+export interface DashboardFilterPreset {
+  id: string;
+  name: string;
+  dashboardChainFilter: string;
+  dashboardSearchQuery: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 // Preferences State Types
@@ -78,10 +92,21 @@ export interface DataActions {
   resetData: () => void;
 }
 
-// Combined Store Types
-export interface AppStoreState extends UIState, PreferencesState, DataState {}
+// Wallet State Types
+export interface WalletState {
+  walletAddress: string | null;
+  isWalletConnected: boolean;
+}
 
-export interface AppStore extends AppStoreState, UIActions, PreferencesActions, DataActions {}
+export interface WalletActions {
+  setWalletAddress: (address: string | null) => void;
+  disconnectWallet: () => void;
+}
+
+// Combined Store Types
+export interface AppStoreState extends UIState, PreferencesState, DataState, WalletState {}
+
+export interface AppStore extends AppStoreState, UIActions, PreferencesActions, DataActions, WalletActions {}
 
 // Persistence Config
 export interface PersistenceConfig {
