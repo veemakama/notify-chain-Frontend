@@ -11,6 +11,7 @@ import {
 } from "@/src/components/dashboard/channel-icon";
 import { Button } from "@/src/components/ui/button";
 import { useData } from "@/src/store";
+import { ExportMenu } from "@/src/components/export-menu";
 import {
   channelLabels,
   timeAgo,
@@ -32,15 +33,18 @@ export default function RulesPage() {
       />
 
       <div className="flex-1 space-y-6 p-4 md:p-6">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
             <span className="text-foreground">{activeCount}</span> active ·{" "}
             {rules.length} total
           </p>
-          <Button onClick={() => setShowForm((s) => !s)}>
-            <Plus className="size-4" />
-            New rule
-          </Button>
+          <div className="flex items-center gap-2">
+            <ExportMenu dataType="rules" />
+            <Button onClick={() => setShowForm((s) => !s)}>
+              <Plus className="size-4" />
+              New rule
+            </Button>
+          </div>
         </div>
 
         {showForm ? (

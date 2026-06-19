@@ -7,6 +7,7 @@ import Link from "next/link";
 import { StatusBadge } from "@/src/components/dashboard/status-badge";
 import { Button } from "@/src/components/ui/button";
 import { useData } from "@/src/store";
+import { ExportMenu } from "@/src/components/export-menu";
 import {
   chainColors,
   timeAgo,
@@ -38,15 +39,18 @@ export default function WatchlistPage() {
       />
 
       <div className="flex-1 space-y-6 p-4 md:p-6">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
             <span className="text-foreground">{activeCount}</span> active ·{" "}
             {items.length} total
           </p>
-          <Button>
-            <Plus className="size-4" />
-            Add contract
-          </Button>
+          <div className="flex items-center gap-2">
+            <ExportMenu dataType="watchlist" />
+            <Button>
+              <Plus className="size-4" />
+              Add contract
+            </Button>
+          </div>
         </div>
 
         <div className="overflow-hidden rounded-xl border border-border bg-card">

@@ -6,6 +6,7 @@ import type {
   ViewMode,
   Theme,
   DashboardFilterPreset,
+  ExportStatus,
 } from '../types';
 import { DEFAULT_UI_STATE } from '../defaults';
 
@@ -103,5 +104,54 @@ export const uiSlice: StateCreator<AppStore, [], [], UIState & UIActions> = (set
     set((state) => ({
       ...DEFAULT_UI_STATE,
       dashboardFilterPresets: state.dashboardFilterPresets,
+    })),
+
+  // Export actions
+  startExport: (job) => {
+    const newJob = {
+      ...job,
+      id: `export_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`,
+      progress: 0,
+      processedItems: 0,
+      startedAt: new Date().toISOString(),
+    };
+    set((state) => ({
+      exportJobs: [...state.exportJobs, newJob],
+    }));
+    return newJob.id;
+  },
+
+  updateExportProgress: (jobId, progress, processedItems, estimatedTimeRemaining) =>
+    set((state) => ({
+      exportJobs: state.exportJobs.map((job) =>
+        job.id === jobId
+          ? { ...job, progress, processedItems, estimatedTimeRemaining }
+          : job
+      ),
+    })),
+
+  updateExportStatus: (jobId, status, error, downloadUrl) =>
+    set((state) => ({
+      exportJobs: state.exportJobs.map((job) =>
+        job.id === jobId
+          ? {
+              ...job,
+              status,
+              error,
+              downloadUrl,
+              completedAt: status === 'completed' || status === 'failed' ? new Date().toISOString() : job.completedAt,
+            }
+          : job
+      ),
+    })),
+
+  removeExportJob: (jobId) =>
+    set((state) => ({
+      exportJobs: state.exportJobs.filter((job) => job.id !== jobId),
+    })),
+
+  clearCompletedExports: () =>
+    set((state) => ({
+      exportJobs: state.exportJobs.filter((job) => job.status !== 'completed' && job.status !== 'failed'),
     })),
 });
