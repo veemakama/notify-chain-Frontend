@@ -2,7 +2,26 @@
  * Type definitions for the global state management store
  */
 
-import type { NotificationChannel, NotificationRule, WatchedContract } from '@/src/lib/mock-data';
+import type { NotificationChannel, NotificationRule, WatchedContract, ChainEvent } from '@/src/lib/mock-data';
+
+// Export Types
+export type ExportStatus = 'idle' | 'preparing' | 'processing' | 'completing' | 'completed' | 'failed';
+export type ExportFormat = 'csv' | 'json' | 'pdf';
+
+export interface ExportJob {
+  id: string;
+  status: ExportStatus;
+  progress: number; // 0-100
+  format: ExportFormat;
+  dataType: 'events' | 'rules' | 'channels' | 'watchlist';
+  totalItems: number;
+  processedItems: number;
+  estimatedTimeRemaining?: number; // in seconds
+  error?: string;
+  startedAt: string;
+  completedAt?: string;
+  downloadUrl?: string;
+}
 
 // UI State Types
 export type ViewMode = 'grid' | 'list';
@@ -17,6 +36,8 @@ export interface UIState {
   dashboardChainFilter: string;
   dashboardSearchQuery: string;
   dashboardFilterPresets: DashboardFilterPreset[];
+  // Export jobs
+  exportJobs: ExportJob[];
 }
 
 export interface UIActions {
@@ -32,6 +53,13 @@ export interface UIActions {
   deleteDashboardFilterPreset: (id: string) => void;
   applyDashboardFilterPreset: (id: string) => void;
   resetUIState: () => void;
+
+  // Export actions
+  startExport: (job: Omit<ExportJob, 'id' | 'progress' | 'processedItems' | 'startedAt' | 'completedAt' | 'downloadUrl'>) => string;
+  updateExportProgress: (jobId: string, progress: number, processedItems: number, estimatedTimeRemaining?: number) => void;
+  updateExportStatus: (jobId: string, status: ExportStatus, error?: string, downloadUrl?: string) => void;
+  removeExportJob: (jobId: string) => void;
+  clearCompletedExports: () => void;
 }
 
 export interface DashboardFilterPreset {

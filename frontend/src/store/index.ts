@@ -95,6 +95,7 @@ export function useUIState<T>(selector?: (state: AppStore) => T): T | AppStore {
     dashboardChainFilter: state.dashboardChainFilter,
     dashboardSearchQuery: state.dashboardSearchQuery,
     dashboardFilterPresets: state.dashboardFilterPresets,
+    exportJobs: state.exportJobs,
     toggleSidebar: state.toggleSidebar,
     openModal: state.openModal,
     closeModal: state.closeModal,
@@ -107,6 +108,11 @@ export function useUIState<T>(selector?: (state: AppStore) => T): T | AppStore {
     deleteDashboardFilterPreset: state.deleteDashboardFilterPreset,
     applyDashboardFilterPreset: state.applyDashboardFilterPreset,
     resetUIState: state.resetUIState,
+    startExport: state.startExport,
+    updateExportProgress: state.updateExportProgress,
+    updateExportStatus: state.updateExportStatus,
+    removeExportJob: state.removeExportJob,
+    clearCompletedExports: state.clearCompletedExports,
   }))) as (state: AppStore) => T | AppStore;
   return useAppStore(sel);
 }

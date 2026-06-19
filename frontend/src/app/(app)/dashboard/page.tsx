@@ -20,6 +20,10 @@ import { StatusBadge } from "@/src/components/dashboard/status-badge";
 import { EventVolumeChart } from "@/src/components/dashboard/event-volume-chart";
 import { ChannelMetrics } from "@/src/components/dashboard/channel-metrics";
 import { useUIState } from "@/src/store";
+import { Button } from "@/src/components/ui/button";
+import { Input } from "@/src/components/ui/input";
+import { ExportMenu } from "@/src/components/export-menu";
+import type { DashboardFilterPreset } from "@/src/store/types";
 import {
   events,
   dashboardStats,
@@ -205,6 +209,7 @@ export default function DashboardPage() {
                 <StatusBadge tone="success" label="live" pulse />
               </div>
               <div className="flex flex-wrap items-center gap-2">
+                <ExportMenu dataType="events" />
                 <div className="flex items-center gap-2 rounded-md border border-border bg-background px-3 py-1.5">
                   <Search className="size-4 text-muted-foreground" />
                   <input

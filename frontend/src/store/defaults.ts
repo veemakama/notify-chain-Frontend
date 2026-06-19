@@ -12,6 +12,7 @@ export const DEFAULT_UI_STATE: UIState = {
   dashboardChainFilter: 'All',
   dashboardSearchQuery: '',
   dashboardFilterPresets: [],
+  exportJobs: [],
 };
 
 export const DEFAULT_PREFERENCES: PreferencesState = {
