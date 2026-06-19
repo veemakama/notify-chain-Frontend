@@ -9,6 +9,7 @@ import {
   Send,
   Zap,
   ArrowUpRight,
+  Megaphone,
 } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 
@@ -17,6 +18,7 @@ const nav = [
   { href: "/rules", label: "Rules", icon: Bell },
   { href: "/watchlist", label: "Watchlist", icon: Radio },
   { href: "/channels", label: "Channels", icon: Send },
+  { href: "/bulk", label: "Bulk", icon: Megaphone },
 ];
 
 export function Sidebar() {
