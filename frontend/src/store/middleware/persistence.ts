@@ -7,6 +7,7 @@ import { PersistOptions } from 'zustand/middleware';
 import type { AppStore } from '../types';
 import { DEFAULT_UI_STATE } from '../defaults';
 import { DEFAULT_PREFERENCES } from '../defaults';
+import { logger } from '@/src/lib/logger';
 
 /**
  * Custom persistence configuration
@@ -34,7 +35,7 @@ export const persistenceConfig: PersistOptions<AppStore, Partial<AppStore>> = {
         soundEnabled: merged.soundEnabled !== undefined ? merged.soundEnabled : DEFAULT_PREFERENCES.soundEnabled,
       } as AppStore;
     } catch (error) {
-      console.error('Error merging persisted state:', error);
+      logger.error('Error merging persisted state', error);
       return currentState;
     }
   },
@@ -73,7 +74,7 @@ export function hydrateStore(): Partial<AppStore> {
 
     return parsed.state;
   } catch (error) {
-    console.error('Error hydrating store:', error);
+    logger.error('Error hydrating store', error);
     return {};
   }
 }
@@ -87,6 +88,6 @@ export function clearPersistedState(): void {
       localStorage.removeItem('notify-chain-store');
     }
   } catch (error) {
-    console.error('Error clearing persisted state:', error);
+    logger.error('Error clearing persisted state', error);
   }
 }
