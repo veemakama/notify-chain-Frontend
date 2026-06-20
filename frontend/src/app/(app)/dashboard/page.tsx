@@ -154,24 +154,28 @@ export default function DashboardPage() {
             value={dashboardStats.eventsToday.toLocaleString()}
             icon={Activity}
             delta={dashboardStats.eventsTodayDelta}
+            metric="events-today"
           />
           <StatCard
             label="Notifications sent"
             value={dashboardStats.notificationsSent.toLocaleString()}
             icon={Bell}
             delta={dashboardStats.notificationsDelta}
+            metric="notifications-sent"
           />
           <StatCard
             label="Active rules"
             value={String(dashboardStats.activeRules)}
             icon={Radio}
             hint={`${dashboardStats.watchedContracts} contracts watched`}
+            metric="active-rules"
           />
           <StatCard
             label="Delivery success"
             value={`${dashboardStats.deliverySuccess}%`}
             icon={CheckCircle2}
             hint={`${dashboardStats.avgLatencyMs}ms avg latency`}
+            metric="delivery-success"
           />
         </div>
 
